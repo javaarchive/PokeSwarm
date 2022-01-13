@@ -83,6 +83,34 @@ async function spawnPokemon(channelOrID, pokemonID){
         pokemonID = Math.floor(Math.random()*100) + 50;
     }
     
+    // leovl discord embed generator
+    const embed = {
+        "content": "Wild Pokemon Appeared!",
+        "embed": {
+          "title": "Wild Pokemon Name appeared",
+          "description": "p:catch <pokemon name>",
+          "url": "",
+          "color": 9842162,
+          "timestamp": "2022-01-13T19:34:41.190Z",
+          "footer": {
+            "icon_url": "https://cdn.discordapp.com/embed/avatars/0.png",
+            "text": "Pokeswarm"
+          },
+          "thumbnail": {
+            "url": "https://cdn.discordapp.com/embed/avatars/0.png"
+          },
+          "image": {
+            "url": "https://cdn.discordapp.com/embed/avatars/spirte.png"
+          },
+          "author": {
+            "name": "Pokeswarm",
+            "url": "https://discordapp.com",
+            "icon_url": "https://cdn.discordapp.com/embed/avatars/0.png"
+          },
+          "fields": []
+        }
+      };
+      channel.createMessage(data);
 }
 
 bot.on("typingStart", (channel) => {
