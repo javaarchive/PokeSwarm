@@ -1,15 +1,24 @@
-const config = require('./config')
+require("dotenv").config();
+
+const config = require('./config');
+
+// console.log(config.token,process.env);
+
 const Eris = require('eris')
-const bot = new Eris(config.prefix)
+const bot = new Eris.Client(config.token);
 
 const fs = require('fs')
 const commands = []
 const commandsAliases = {}
 
-const membersMap = new Map()
+const membersMap = new Map();
+
+let seenChannels = [];
 
 fs.readdirSync('./commands').forEach(command => {
     const cmd = require(`./commands/${command}`)
+
+    bot.on("error",console.warn);
 
     commands.push(cmd.name)
     if (cmd.aliases) { cmd.aliases.forEach(alias => { commandsAliases[alias] = cmd.name }) }
@@ -63,6 +72,18 @@ bot.on('messageCreate', message => {
         console.error(e)
         message.channel.createMessage('There was an error trying to execute this command.')
     }
+});
+
+function spawnPokemon(channelOrID){
+    /** @type {Eris.TextChannel} */
+    let channel = channelOrID;
+    if(typeof channelOrId == "number") channel = await bot.getChannel(channelOrID);
+    // if(channelOrID.id) channel = channelOrID;
+    
+}
+
+bot.on("typingStart", (channel) => {
+    
 })
 
-bot.connect()
+bot.connect();
