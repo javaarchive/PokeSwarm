@@ -74,16 +74,22 @@ bot.on('messageCreate', message => {
     }
 });
 
-function spawnPokemon(channelOrID){
+async function spawnPokemon(channelOrID, pokemonID){
     /** @type {Eris.TextChannel} */
     let channel = channelOrID;
     if(typeof channelOrId == "number") channel = await bot.getChannel(channelOrID);
     // if(channelOrID.id) channel = channelOrID;
+    if(!pokemonID){
+        pokemonID = Math.floor(Math.random()*100) + 50;
+    }
     
 }
 
 bot.on("typingStart", (channel) => {
-    
-})
+    if(Math.random() < 1){
+        // 100% for testing
+        spawnPokemon(channel.id);
+    }
+});
 
 bot.connect();
