@@ -1,0 +1,12 @@
+{
+  "name": "eris-discord-boilerplate",
+  "version": "1.0.0",
+  "description": "Discord bot boilerplate using Eris with a command handler to get you started.",
+  "main": "bot.js",
+  "keywords": [],
+  "author": "Rmly",
+  "license": "MIT",
+  "dependencies": {
+    "eris": "^0.15.1"
+  }
+}
