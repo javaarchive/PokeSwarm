@@ -3,6 +3,8 @@ require("dotenv").config();
 const config = require('./config');
 // console.log(config.token,process.env);
 
+const { SlashCreator, GatewayServer } = require('slash-create');
+
 const Eris = require('eris')
 const bot = new Eris.Client(config.token);
 
