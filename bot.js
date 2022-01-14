@@ -1,5 +1,7 @@
 require("dotenv").config();
 
+const path = require("path");
+
 const config = require('./config');
 // console.log(config.token,process.env);
 
@@ -128,6 +130,7 @@ async function spawnPokemon(channelOrID, pokemonID){
 }
 
 bot.on("typingStart", (channel) => {
+
     if(Math.random() < 0.25 && channel.id == "803134752344506389"){
         // 100% for testing
         console.log("Channel",channel.id);
@@ -135,4 +138,26 @@ bot.on("typingStart", (channel) => {
     }
 });
 
+const creator = new SlashCreator({
+    applicationID: '862449173054750721',
+    publicKey: config.pubkey,
+    token: config.token,
+    client: bot
+  });
+  
+  creator
+    .withServer(
+      new GatewayServer(
+        (handler) => bot.on('rawWS', (event) => {
+          console.log("Interaction Recieved");
+          if (event.t === 'INTERACTION_CREATE') handler(event.d);
+        })
+      )
+    )
+    .registerCommandsIn(path.join(__dirname, 'slash_commands'))
+    .syncCommands();
+  
+setInterval(() => {
+    // console.log(creator.commands.size);
+},1000)
 bot.connect();
