@@ -15,6 +15,8 @@ const membersMap = new Map();
 const Pokemon = require("pokemon.js")
 let seenChannels = [];
 
+const db = require("./config").db;
+
 fs.readdirSync('./commands').forEach(command => {
     const cmd = require(`./commands/${command}`)
 
@@ -82,33 +84,32 @@ async function spawnPokemon(channelOrID, pokemonID){
     // if(channelOrID.id) channel = channelOrID;
     if(!pokemonID){
         pokemonID = Math.floor(Math.random()*100) + 50;
-
     }
 
     let pkmnData = await Pokemon.getPokemon(pokemonID);
     let pkmnName = pkmnData["name"];
-    console.log(channel);
+    // console.log(channel);
     // console.log(pkmnData);
     
     // leovl discord embed generator
     const embedWithMessage = {
         "content": "Wild Pokemon Appeared!",
         "embed": {
-          "title": "Wild Pokemon Name appeared",
+          "title": "Who's that pokemon? ",
           "description": "p:catch <pokemon name>",
           "url": "",
           "color": 9842162,
-          "timestamp": "2022-01-13T19:34:41.190Z",
+          "timestamp": (new Date()).toISOString(),
           "footer": {
             "icon_url": "https://cdn.discordapp.com/embed/avatars/0.png",
-            "text": "Pokeswarm"
+            "text": "Pokeswarm System at " + (new Date()).toLocaleString('en-US', { timeZone: config.TIMEZONE || 'America/Los_Angeles' })
           },
           "thumbnail": {
-            "url": "https://cdn.discordapp.com/embed/avatars/0.png"
-          },
-          "image": {
             "url": pkmnData["sprites"]["front_default"]
           },
+          //"image": {
+          //  "url": pkmnData["sprites"]["front_default"]
+          //},
           "author": {
             "name": "Pokeswarm",
             "url": "https://discordapp.com",
@@ -119,11 +120,13 @@ async function spawnPokemon(channelOrID, pokemonID){
       };
       console.log(embedWithMessage);
       console.log(channel.type);
-      channel.createMessage(embedWithMessage);
+      
+      await db.set("pokemon-of-channel-" + channel.id, JSON.stringify(pkmnData));
+      await channel.createMessage(embedWithMessage);
 }
 
 bot.on("typingStart", (channel) => {
-    if(Math.random() < 1){
+    if(Math.random() < 0.25 && channel.id == "803134752344506389"){
         // 100% for testing
         console.log("Channel",channel.id);
         spawnPokemon(channel.id);
