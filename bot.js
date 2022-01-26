@@ -44,7 +44,7 @@ bot.on('messageCreate', message => {
 
     const args = message.content.slice(config.prefix.length).trim().split(/ +/g)
     const command = args.shift().toLowerCase()
-    let cmd
+    let cmd;
 
     if (commands.includes(command)) cmd = require(`./commands/${command}`)
     else {
@@ -152,7 +152,12 @@ if(config.extremeDebug){
 bot.on("ready", () => {
     console.log("Pubkey", config.pubkey);
     console.log("Connected!")
-})
+});
 
+bot.on("interactionCreate", (interaction) => {
+    if(interaction instanceof Eris.ComponentInteraction) {
+        await require(`./interaction/${interaction.id}`).execute(interaction);
+    }
+});
 
 bot.connect();

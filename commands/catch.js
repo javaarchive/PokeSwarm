@@ -32,12 +32,20 @@ module.exports = {
                       style: Constants.ButtonStyles.PRIMARY, 
                       custom_id: "fight",
                       label: "Fight!",
-                      disabled: false // Whether or not the button is disabled, is false by default
-                  }
+                      disabled: false
+                  },{
+                    type: Constants.ComponentTypes.BUTTON, 
+                    style: Constants.ButtonStyles.SECONDARY, 
+                    custom_id: "catch",
+                    label: "Catch!",
+                    disabled: false
+                }
               ]
           }
         ]
       });
+    }else{
+      await message.channel.createMessage("That's not the pokemon. ");
     }
   }
 }
