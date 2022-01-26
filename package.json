@@ -11,10 +11,9 @@
     "@keyv/sqlite": "^2.1.0",
     "dotenv": "^11.0.0",
     "endb": "^1.3.0",
-    "eris": "^0.15.1",
+    "eris": "^0.16.1",
     "keyv": "^4.0.5",
     "pokemon.js": "^1.1.8",
-    "slash-create": "^5.0.3",
     "tslib": "^2.3.1"
   },
   "scripts": {

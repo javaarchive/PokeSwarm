@@ -5,10 +5,11 @@ const path = require("path");
 const config = require('./config');
 // console.log(config.token,process.env);
 
-const { SlashCreator, GatewayServer } = require('slash-create');
 
 const Eris = require('eris')
-const bot = new Eris.Client(config.token);
+const bot = new Eris.Client(config.token,{
+    // intents: 0
+});
 
 const fs = require('fs')
 const commands = []
@@ -130,7 +131,7 @@ async function spawnPokemon(channelOrID, pokemonID){
 }
 
 bot.on("typingStart", (channel) => {
-
+    console.log("Got typing",channel.id);
     if(Math.random() < 0.25 && channel.id == "803134752344506389"){
         // 100% for testing
         console.log("Channel",channel.id);
@@ -138,26 +139,20 @@ bot.on("typingStart", (channel) => {
     }
 });
 
-const creator = new SlashCreator({
-    applicationID: '862449173054750721',
-    publicKey: config.pubkey,
-    token: config.token,
-    client: bot
-  });
-  
-  creator
-    .withServer(
-      new GatewayServer(
-        (handler) => bot.on('rawWS', (event) => {
-          console.log("Interaction Recieved");
-          if (event.t === 'INTERACTION_CREATE') handler(event.d);
-        })
-      )
-    )
-    .registerCommandsIn(path.join(__dirname, 'slash_commands'))
-    .syncCommands();
-  
-setInterval(() => {
-    // console.log(creator.commands.size);
-},1000)
+if(config.extremeDebug){
+    bot.on("warn",console.warn);
+    bot.on("hello", (...args) => console.log("Hello Recieved",args));
+    bot.on("unavailableGuildCreate", console.warn);
+    bot.on("error", console.warn);
+    bot.on("disconnect", () => console.log("Disconnected"));
+    bot.on("debug", console.debug);
+}
+
+
+bot.on("ready", () => {
+    console.log("Pubkey", config.pubkey);
+    console.log("Connected!")
+})
+
+
 bot.connect();

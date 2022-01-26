@@ -5,6 +5,7 @@ module.exports = {
   token: process.env.TOKEN, // you tried
   prefix: 'p:',
   pubkey: process.env.PUBKEY,
-  db: new Endb('sqlite://database.sqlite')
+  db: new Endb('sqlite://database.sqlite'),
+  extremeDebug: false
 }
 
