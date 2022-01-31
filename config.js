@@ -6,6 +6,6 @@ module.exports = {
   prefix: 'p:',
   pubkey: process.env.PUBKEY,
   db: new Endb('sqlite://database.sqlite'),
-  extremeDebug: false
+  extremeDebug: true
 }
 

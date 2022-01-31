@@ -9,6 +9,7 @@ const config = require('./config');
 const Eris = require('eris')
 const bot = new Eris.Client(config.token,{
     // intents: 0
+    intents: 98045
 });
 
 const fs = require('fs')
@@ -40,6 +41,7 @@ bot.on('ready', () => {
 bot.on('messageCreate', message => {
     if (message.author.bot) return
     if (message.channel.type === 1) return
+    if(message.content && message.content.includes("x_spawn_x")) spawnPokemon(message.channel.id);
     if (!message.content.startsWith(config.prefix)) return
 
     const args = message.content.slice(config.prefix.length).trim().split(/ +/g)
@@ -148,16 +150,17 @@ if(config.extremeDebug){
     bot.on("debug", console.debug);
 }
 
+bot.on("interactionCreate",  async (interaction) => {
+    // console.log(interaction.data);
+    if(interaction instanceof Eris.ComponentInteraction) {
+        console.log(interaction.data.custom_id);
+        (await require(`./interactions/${interaction.data.custom_id}`)).execute(interaction);
+    }
+});
+
 
 bot.on("ready", () => {
     console.log("Pubkey", config.pubkey);
     console.log("Connected!")
 });
-
-bot.on("interactionCreate", (interaction) => {
-    if(interaction instanceof Eris.ComponentInteraction) {
-        await require(`./interaction/${interaction.id}`).execute(interaction);
-    }
-});
-
 bot.connect();
